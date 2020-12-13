@@ -1,0 +1,20 @@
+{
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "name": "deny-resources-without-tags", 
+    "properties": {
+        "mode": "indexed",
+        "displayName": "Deny deployment of resources that don't have tags.",
+        "description": "This policy denies any resources that do not have tags.",
+        "policyRule": {
+            "if": {
+                    {
+        		"field": "[concat('tags[', parameters('tagName'), ']')]",
+        		"exists": "false"
+                    }
+            },
+            "then": {
+                "effect": "deny"
+            }
+        }
+    }
+}

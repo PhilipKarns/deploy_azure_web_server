@@ -1,0 +1,9 @@
+{
+    "if": {
+        "value": "[less(length(field('tags')), 1)]",
+        "exists": "true"
+    },
+    "then": {
+        "effect": "deny"
+    }
+}
