@@ -1,16 +1,26 @@
 {
     "type": "Microsoft.Authorization/policyDefinitions",
-    "name": "deny-resources-without-tags", 
+    "name": "deny-resources-without-tags",
     "properties": {
         "mode": "indexed",
         "displayName": "Deny deployment of resources that don't have tags.",
         "description": "This policy denies any resources that do not have tags.",
+        "parameters": {
+            "tagName": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "tagging-policy",
+                    "description": "policy that denies resources without tags"
+                },
+                "defaultValue": "tagging-policy"
+            }
+        },
         "policyRule": {
             "if": {
-                    {
-        		"field": "[concat('tags[', parameters('tagName'), ']')]",
-        		"exists": "false"
-                    }
+                {
+                    "field": "[concat('tags[', parameters('tagName'), ']')]",
+                    "exists": "false"
+                }
             },
             "then": {
                 "effect": "deny"

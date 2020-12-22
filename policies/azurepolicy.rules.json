@@ -1,7 +1,7 @@
 {
     "if": {
-        "value": "[less(length(field('tags')), 1)]",
-        "exists": "true"
+        "field": "[concat('tags[', parameters('tagName'), ']')]",
+        "exists": "false"
     },
     "then": {
         "effect": "deny"
