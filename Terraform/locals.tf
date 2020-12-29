@@ -1,6 +1,6 @@
 locals {
 	nsgrules = {
-		toSubnetAllow {
+		toSubnetAllow = {
 			name = "toSubnetAllow"
 			priority = 100
 			direction = "Outbound"
@@ -12,7 +12,7 @@ locals {
 			destination_address_prefix = "VirtualNetwork"			
 		}
 
-		fromInternetDeny {
+		fromInternetDeny = {
 			name = "fromInternetDeny"
 			priority = 101
 			direction = "Outbound"

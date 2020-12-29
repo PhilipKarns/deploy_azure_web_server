@@ -8,7 +8,16 @@ variable "location" {
 }
 
 variable "vm_instances" {
-    descirption = "The number of Virtual Machines to create."
+    description = "The number of Virtual Machines to create."
     type = number
     default = 1
+}
+
+variable "packerImageId" {
+	default = "/subscriptions/f5649517-0de7-4647-98bc-8ee75af010a5/resourceGroups/web-server-project1-rg/providers/Microsoft.Compute/images/ubuntuImageProject1"
+}
+
+variable "taggingPolicy" {
+	description = "Tag for all resources"
+	default = "tagging-policy"
 }

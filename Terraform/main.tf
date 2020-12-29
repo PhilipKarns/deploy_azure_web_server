@@ -12,6 +12,10 @@ resource "azurerm_virtual_network" "main" {
 	address_space = ["10.0.0.0/16"]
 	location = azurerm_resource_group.main.location
 	resource_group_name = azurerm_resource_group.main.name
+
+	tags = {
+		displayName: var.taggingPolicy	
+	}
 }
 
 resource "azurerm_subnet" "internal" {
@@ -25,9 +29,13 @@ resource "azurerm_network_security_group" "main" {
 	name = "${var.prefix}-SecurityGroup"
 	location = azurerm_resource_group.main.location
 	resource_group_name = azurerm_resource_group.main.name
+
+	tags = {
+		displayName: var.taggingPolicy	
+	}
 }
 
-resource "azurerm_network_security_rule "main" {
+resource "azurerm_network_security_rule" "main" {
 	for_each = local.nsgrules
 	name = each.key
 	direction = each.value.direction
@@ -57,6 +65,10 @@ resource "azurerm_public_ip" "main" {
 	location = azurerm_resource_group.main.location
 	resource_group_name = azurerm_resource_group.main.name
 	allocation_method = "Dynamic"
+
+	tags = {
+		displayName: var.taggingPolicy	
+	}
 }
 
 resource "azurerm_lb" "main" {
@@ -66,17 +78,17 @@ resource "azurerm_lb" "main" {
 
 	frontend_ip_configuration {
 	name = "${var.prefix}-publicIp"
-	public_ip_address_id = azurerm_publi_ip.main.id
+	public_ip_address_id = azurerm_public_ip.main.id
 	}
 }
 
-resoure "azurerm_lb_backend_address_pool" "main" {
+resource "azurerm_lb_backend_address_pool" "main" {
 	name = "${var.prefix}-backendAddressPool"
 	resource_group_name = azurerm_resource_group.main.name	
 	loadbalancer_id = azurerm_lb.main.id
 }
 
-resource "azurerm_lb_backend_address_pool_association" {
+resource "azurerm_network_interface_backend_address_pool_association" "main" {
 	network_interface_id = azurerm_network_interface.main.id
 	ip_configuration_name = "internal"
 	backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
@@ -86,12 +98,10 @@ resource "azurerm_availability_set" "main" {
 	name = "${var.prefix}-aSet"
 	location = azurerm_resource_group.main.location
 	resource_group_name = azurerm_resource_group.main.name
-}
 
-#Packer Image Reference
-data "azurerm_image" "packer_image" {
-	name = 	"ubuntuImageProject1"
-	resource_group_name = azurerm_resource_group.main.name
+	tags = {
+		displayName: var.taggingPolicy	
+	}
 }
 
 #Create Linux Virtual Machine
@@ -102,13 +112,19 @@ resource "azurerm_linux_virtual_machine" "main" {
 	resource_group_name = azurerm_resource_group.main.name
 	size = "Standard_F2"
 	admin_username = "adminuser"
-	admin_Password = "P@ssw0rd1234!"
+	admin_password = "P@ssw0rd1234!"
 	disable_password_authentication = false
 	network_interface_ids = [
-		azurerm_network_interface_main.id
+		azurerm_network_interface.main.id
 	]
 
-	source_image_id = data.azurerm_image.packer_image.id
+	  os_disk {
+		caching              = "ReadWrite"
+		storage_account_type = "Standard_LRS"
+	  }
+
+	availability_set_id = azurerm_availability_set.main.id
+	source_image_id = var.packerImageId
 }
 
 #Create a managed disk for our VMs for extra storage
@@ -116,8 +132,13 @@ resource "azurerm_managed_disk" "main" {
 	name = "${var.prefix}-md"	
 	location = azurerm_resource_group.main.location
 	resource_group_name = azurerm_resource_group.main.name
+	storage_account_type = "Standard_LRS"
 	create_option = "Empty"
 	disk_size_gb = "1"
+
+	tags = {
+		displayName: var.taggingPolicy	
+	}
 }
 
 
