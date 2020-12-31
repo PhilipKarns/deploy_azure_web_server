@@ -5,6 +5,10 @@ provider "azurerm" {
 resource "azurerm_resource_group" "main"{
     name = "${var.prefix}-rg"
     location = var.location
+
+	tags = {
+		displayName = var.taggingPolicy	
+	}
 }
 
 resource "azurerm_virtual_network" "main" {
@@ -14,7 +18,7 @@ resource "azurerm_virtual_network" "main" {
 	resource_group_name = azurerm_resource_group.main.name
 
 	tags = {
-		displayName: var.taggingPolicy	
+		displayName = var.taggingPolicy	
 	}
 }
 
@@ -31,7 +35,7 @@ resource "azurerm_network_security_group" "main" {
 	resource_group_name = azurerm_resource_group.main.name
 
 	tags = {
-		displayName: var.taggingPolicy	
+		displayName = var.taggingPolicy	
 	}
 }
 
@@ -58,6 +62,10 @@ resource "azurerm_network_interface" "main" {
 		subnet_id = azurerm_subnet.internal.id
 		private_ip_address_allocation = "Dynamic"
 	}
+
+	tags = {
+		displayName = var.taggingPolicy	
+	}
 }
 
 resource "azurerm_public_ip" "main" {
@@ -67,7 +75,7 @@ resource "azurerm_public_ip" "main" {
 	allocation_method = "Dynamic"
 
 	tags = {
-		displayName: var.taggingPolicy	
+		displayName = var.taggingPolicy	
 	}
 }
 
@@ -79,6 +87,10 @@ resource "azurerm_lb" "main" {
 	frontend_ip_configuration {
 	name = "${var.prefix}-publicIp"
 	public_ip_address_id = azurerm_public_ip.main.id
+	}
+
+	tags = {
+		displayName = var.taggingPolicy	
 	}
 }
 
@@ -100,7 +112,7 @@ resource "azurerm_availability_set" "main" {
 	resource_group_name = azurerm_resource_group.main.name
 
 	tags = {
-		displayName: var.taggingPolicy	
+		displayName = var.taggingPolicy	
 	}
 }
 
@@ -123,6 +135,10 @@ resource "azurerm_linux_virtual_machine" "main" {
 		storage_account_type = "Standard_LRS"
 	  }
 
+	tags = {
+		displayName = var.taggingPolicy	
+	}
+
 	availability_set_id = azurerm_availability_set.main.id
 	source_image_id = var.packerImageId
 }
@@ -137,7 +153,7 @@ resource "azurerm_managed_disk" "main" {
 	disk_size_gb = "1"
 
 	tags = {
-		displayName: var.taggingPolicy	
+		displayName = var.taggingPolicy	
 	}
 }
 
