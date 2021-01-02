@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "main"{
     location = var.location
 
 	tags = {
-		displayName = var.taggingPolicy	
+		displayName = var.tagging-policy	
 	}
 }
 
@@ -18,7 +18,7 @@ resource "azurerm_virtual_network" "main" {
 	resource_group_name = azurerm_resource_group.main.name
 
 	tags = {
-		displayName = var.taggingPolicy	
+		displayName = var.tagging-policy	
 	}
 }
 
@@ -34,24 +34,34 @@ resource "azurerm_network_security_group" "main" {
 	location = azurerm_resource_group.main.location
 	resource_group_name = azurerm_resource_group.main.name
 
+	security_rule {
+			name = "toSubnetAllow"
+			priority = 100
+			direction = "Outbound"
+			access = "Allow"
+			protocol = "*"
+			source_port_range = "*"
+			destination_port_range = "*"
+			source_address_prefix = "*"
+			destination_address_prefix = "VirtualNetwork"	
+	}
+
+	security_rule {
+			name = "fromInternetDeny"
+			priority = 101
+			direction = "Outbound"
+			access = "Allow"
+			protocol = "*"
+			source_port_range = "*"
+			destination_port_range = "*"
+			source_address_prefix = "*"
+			destination_address_prefix = "*"	
+	}
+
 	tags = {
-		displayName = var.taggingPolicy	
+		displayName = var.tagging-policy	
 	}
 }
-
-resource "azurerm_network_security_rule" "main" {
-	for_each = local.nsgrules
-	name = each.key
-	direction = each.value.direction
-	access = each.value.access
-	priority = each.value.priority
-	protocol = each.value.protocol
-	source_port_range = each.value.source_port_range
-	destination_address_prefix = each.value.destination_address_prefix
-	resource_group_name = azurerm_resource_group.main.name
-	network_security_group_name = azurerm_network_security_group.main.name
-}
-
 resource "azurerm_network_interface" "main" {
 	name = "${var.prefix}-nic"
 	location = azurerm_resource_group.main.location
@@ -64,7 +74,7 @@ resource "azurerm_network_interface" "main" {
 	}
 
 	tags = {
-		displayName = var.taggingPolicy	
+		displayName = var.tagging-policy	
 	}
 }
 
@@ -75,7 +85,7 @@ resource "azurerm_public_ip" "main" {
 	allocation_method = "Dynamic"
 
 	tags = {
-		displayName = var.taggingPolicy	
+		displayName = var.tagging-policy	
 	}
 }
 
@@ -90,7 +100,7 @@ resource "azurerm_lb" "main" {
 	}
 
 	tags = {
-		displayName = var.taggingPolicy	
+		displayName = var.tagging-policy	
 	}
 }
 
@@ -112,7 +122,7 @@ resource "azurerm_availability_set" "main" {
 	resource_group_name = azurerm_resource_group.main.name
 
 	tags = {
-		displayName = var.taggingPolicy	
+		displayName = var.tagging-policy	
 	}
 }
 
@@ -136,7 +146,7 @@ resource "azurerm_linux_virtual_machine" "main" {
 	  }
 
 	tags = {
-		displayName = var.taggingPolicy	
+		displayName = var.tagging-policy	
 	}
 
 	availability_set_id = azurerm_availability_set.main.id
@@ -153,7 +163,7 @@ resource "azurerm_managed_disk" "main" {
 	disk_size_gb = "1"
 
 	tags = {
-		displayName = var.taggingPolicy	
+		displayName = var.tagging-policy	
 	}
 }
 

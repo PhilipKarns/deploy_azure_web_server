@@ -17,7 +17,7 @@ variable "packerImageId" {
 	default = "/subscriptions/f5649517-0de7-4647-98bc-8ee75af010a5/resourceGroups/web-server-project1-rg/providers/Microsoft.Compute/images/ubuntuImageProject1"
 }
 
-variable "taggingPolicy" {
+variable "tagging-policy" {
 	description = "Tag for all resources"
 	default = "tagging-policy"
 }
