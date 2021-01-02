@@ -45,11 +45,11 @@ The output should look something like this:
 
 For the subscription_id variable, you'll need your Azure subscription code. To get that, in the Azure CLI run **az account list** and copy the value from the "id" field. 
 
-####Deploy the Packer Image
+#### Deploy the Packer Image
 
 To deploy the image, in the Azure CLI run the command **packer build server.json**
 
-##Deploy Infrastructure With Terraform
+## Deploy Infrastructure With Terraform
 
 Terraform is used to quickly deploy all of our infrastructure, which is listed in the main.tf file, and also utilizes variables in the vars.tf file. The packer image is referenced in the variables section and is used in the 
 template to create our virtual machines. 
