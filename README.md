@@ -54,6 +54,22 @@ To deploy the image, in the Azure CLI run the command **packer build server.json
 Terraform is used to quickly deploy all of our infrastructure, which is listed in the main.tf file, and also utilizes variables in the vars.tf file. The packer image is referenced in the variables section and is used in the 
 template to create our virtual machines. 
 
+### First, and example about how to change and use the variables. 
+In the vars.tf file are variables that can be used in the main.tf. In vars.tf it would look something like this:
+
+```
+variable "location" {
+    description = "The location to be used for all resources"
+    default = "East US"
+}
+```
+
+And in the main.tf file it would be used like this:
+
+```
+location = var.location
+```
+
 ### Deploy the Infrastructure
 
 To deploy, perform the following steps:
@@ -66,10 +82,14 @@ isn't allowed. To do this we need to run the command **terraform import azurerm_
 * Once the infrastructure has successfully been deployed, we want to then destroy the infrastructure. In the Azure CLI run the command **terraform destroy**. 
 * Run **terraform show** again to confirm all resources have been destroyed.
 
+## Output
+If everything deployed correctly, when you run command **terraform show** the output should look something like this:
+
+![terraform output(./images/terraformshow.png)
+
+And in the Azure Portal it should look something like this:
+
+![azure portal](./images/terraformInPortal.png)
 
 
 
-
-
-Output
-Your words here
