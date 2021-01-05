@@ -85,11 +85,11 @@ isn't allowed. To do this we need to run the command **terraform import azurerm_
 ## Output
 If everything deployed correctly, when you run command **terraform show** the output should look something like this:
 
-![terraform output](./../Images/terraformshow.png)
+![terraform output](./Images/terraformshow.png)
 
 And in the Azure Portal it should look something like this:
 
-![azure portal](./../Images/terraformInPortal.png)
+![azure portal](./Images/terraformInPortal.png)
 
 
 
