@@ -59,7 +59,7 @@ for subscriptions to get your subscription id.
 
 To deploy the image, in the Azure CLI run the command **packer build server.json**, which should have output similar to the following:
 
-![packer output](./Images/PackerBuild.png)
+![packer output](./Images/PackerBuild.PNG)
 
 ## Deploy Infrastructure With Terraform
 
@@ -90,14 +90,14 @@ To deploy, perform the following steps:
 isn't allowed. To do this we need to run the command **terraform import azurerm_resource_group.main /subscriptions/{subsriptionId}/resourceGroups/{resourceGroupName}**. 
 * In the Azure CLI run the command **terraform plan -out solution.plan** to review what infrastructure will be deployed and saved to disk.
 
-![terraform plan](./Images/terraformplan.png)
+![terraform plan](./Images/terraformplan.PNG)
 
 * In the Azure CLI run the command **terraform apply** to deploy the infrastructure. 
 
 ## Output
 If everything deployed correctly, you should see a message like this after running **terraform apply**
 
-![terraform apply](./Images/TerraformApplyComplete.png)
+![terraform apply](./Images/TerraformApplyComplete.PNG)
 
 Then to confirm the resources were created when you run command **terraform show** the output should look something like this:
 
