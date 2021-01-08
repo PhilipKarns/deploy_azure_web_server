@@ -89,13 +89,15 @@ To deploy, perform the following steps:
 * In our Packer image we created a resource group, and we need to import that into Terraform before deploying, so Terraform will used that resource group, instead of trying to create another resource group with the same name, which
 isn't allowed. To do this we need to run the command **terraform import azurerm_resource_group.main /subscriptions/{subsriptionId}/resourceGroups/{resourceGroupName}**. 
 * In the Azure CLI run the command **terraform plan -out solution.plan** to review what infrastructure will be deployed and saved to disk.
+
 ![terraform plan](./Images/terraformplan.png)
 
 * In the Azure CLI run the command **terraform apply** to deploy the infrastructure. 
 
 ## Output
 If everything deployed correctly, you should see a message like this after running **terraform apply**
-![terraform apply](./Images/terraformapplycomplete.png)
+
+![terraform apply](./Images/TerraformApplyComplete.png)
 
 Then to confirm the resources were created when you run command **terraform show** the output should look something like this:
 
