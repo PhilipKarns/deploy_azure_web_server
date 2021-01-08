@@ -49,8 +49,8 @@ resource "azurerm_network_security_group" "main" {
 	security_rule {
 			name = "fromInternetDeny"
 			priority = 101
-			direction = "Outbound"
-			access = "Allow"
+			direction = "inbound"
+			access = "deny"
 			protocol = "*"
 			source_port_range = "*"
 			destination_port_range = "*"
@@ -63,7 +63,8 @@ resource "azurerm_network_security_group" "main" {
 	}
 }
 resource "azurerm_network_interface" "main" {
-	name = "${var.prefix}-nic"
+	count = var.vm_instances
+	name = "${var.prefix}-nic-${var.servers[count.index]}"
 	location = azurerm_resource_group.main.location
 	resource_group_name = azurerm_resource_group.main.name
 
@@ -111,7 +112,8 @@ resource "azurerm_lb_backend_address_pool" "main" {
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "main" {
-	network_interface_id = azurerm_network_interface.main.id
+	count = var.vm_instances
+	network_interface_id = azurerm_network_interface.main[count.index].id
 	ip_configuration_name = "internal"
 	backend_address_pool_id = azurerm_lb_backend_address_pool.main.id
 }
@@ -129,7 +131,7 @@ resource "azurerm_availability_set" "main" {
 #Create Linux Virtual Machine
 resource "azurerm_linux_virtual_machine" "main" {
 	count = var.vm_instances
-	name = "${var.prefix}-vm"	
+	name = "${var.prefix}-vm-${var.servers[count.index]}"	
 	location = azurerm_resource_group.main.location
 	resource_group_name = azurerm_resource_group.main.name
 	size = "Standard_F2"
@@ -137,7 +139,7 @@ resource "azurerm_linux_virtual_machine" "main" {
 	admin_password = "P@ssw0rd1234!"
 	disable_password_authentication = false
 	network_interface_ids = [
-		azurerm_network_interface.main.id
+		azurerm_network_interface.main[count.index].id
 	]
 
 	  os_disk {
@@ -147,6 +149,7 @@ resource "azurerm_linux_virtual_machine" "main" {
 
 	tags = {
 		displayName = var.tagging-policy	
+		name = var.servers[count.index]
 	}
 
 	availability_set_id = azurerm_availability_set.main.id

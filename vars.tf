@@ -10,7 +10,7 @@ variable "location" {
 variable "vm_instances" {
     description = "The number of Virtual Machines to create."
     type = number
-    default = 1
+    default = 2
 }
 
 variable "packerImageId" {
@@ -20,4 +20,9 @@ variable "packerImageId" {
 variable "tagging-policy" {
 	description = "Tag for all resources"
 	default = "tagging-policy"
+}
+
+variable "servers"{
+  type = list
+  default = ["1","2"]
 }
