@@ -36,26 +36,50 @@ resource "azurerm_network_security_group" "main" {
 
 	security_rule {
 			name = "toSubnetAllow"
-			priority = 100
+			priority = 101
 			direction = "Outbound"
 			access = "Allow"
 			protocol = "*"
 			source_port_range = "*"
-			destination_port_range = "*"
+			destination_port_range = "8080"
 			source_address_prefix = "*"
 			destination_address_prefix = "VirtualNetwork"	
 	}
 
 	security_rule {
 			name = "fromInternetDeny"
-			priority = 101
+			priority = 100
 			direction = "inbound"
-			access = "deny"
+			access = "Deny"
 			protocol = "*"
 			source_port_range = "*"
 			destination_port_range = "*"
 			source_address_prefix = "*"
 			destination_address_prefix = "*"	
+	}
+
+	security_rule {
+			name = "toInternetDeny"
+			priority = 100
+			direction = "outbound"
+			access = "Deny"
+			protocol = "*"
+			source_port_range = "*"
+			destination_port_range = "*"
+			source_address_prefix = "*"
+			destination_address_prefix = "*"	
+	}
+
+	security_rule {
+			name = "allowTrafficInVirtualNetwork"
+			priority = 102
+			direction = "inbound"
+			access = "Allow"
+			protocol = "*"
+			source_port_range = "*"
+			destination_port_range = "*"
+			source_address_prefix = VirtualNetwork*"
+			destination_address_prefix = "VirtualNetwork"	
 	}
 
 	tags = {
